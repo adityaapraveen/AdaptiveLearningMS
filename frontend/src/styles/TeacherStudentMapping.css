@@ -1,0 +1,229 @@
+.teacher-student-mapping {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.teacher-student-mapping h2 {
+    color: #333;
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.teacher-student-mapping h3 {
+    color: #444;
+    margin-bottom: 1rem;
+}
+
+.error-message {
+    background-color: #ffebee;
+    color: #c62828;
+    padding: 1rem;
+    border-radius: 5px;
+    margin-bottom: 1rem;
+}
+
+.success-message {
+    background-color: #e8f5e9;
+    color: #2e7d32;
+    padding: 1rem;
+    border-radius: 5px;
+    margin-bottom: 1rem;
+}
+
+/* Teacher Section Styles */
+.teacher-section {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.code-section {
+    background-color: #f5f5f5;
+    padding: 1.5rem;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.code-display {
+    margin: 1.5rem 0;
+}
+
+.code-display span {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #1976d2;
+    background-color: #e3f2fd;
+    padding: 1rem 2rem;
+    border-radius: 8px;
+    letter-spacing: 4px;
+    display: inline-block;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.code-instructions {
+    color: #666;
+    font-size: 0.9rem;
+    margin-top: 1rem;
+}
+
+/* Student Section Styles */
+.student-section {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.join-section {
+    background-color: #f5f5f5;
+    padding: 1.5rem;
+    border-radius: 8px;
+}
+
+.join-form {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.join-form input {
+    flex: 1;
+    padding: 0.75rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1rem;
+}
+
+.join-btn {
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-weight: 500;
+}
+
+.join-btn:hover {
+    background-color: #43a047;
+}
+
+/* List Styles */
+.students-list,
+.teachers-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.students-list li,
+.teachers-list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background-color: #f5f5f5;
+    margin-bottom: 0.5rem;
+    border-radius: 5px;
+}
+
+.join-date {
+    color: #666;
+    font-size: 0.9rem;
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+    .teacher-student-mapping {
+        margin: 1rem;
+        padding: 1rem;
+    }
+
+    .code-display span {
+        font-size: 1.5rem;
+        padding: 0.75rem 1.5rem;
+        letter-spacing: 2px;
+    }
+
+    .join-form {
+        flex-direction: column;
+    }
+
+    .join-btn {
+        width: 100%;
+    }
+}
+
+.teacher-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.teacher-name {
+    font-weight: 500;
+    color: #2c3e50;
+}
+
+.unsubscribe-btn {
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background-color 0.2s;
+}
+
+.unsubscribe-btn:hover {
+    background-color: #c0392b;
+}
+
+.unsubscribe-confirm {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background-color: #f8f9fa;
+    padding: 8px;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.unsubscribe-confirm p {
+    margin: 0;
+    font-weight: 500;
+    color: #e74c3c;
+}
+
+.confirm-yes,
+.confirm-no {
+    padding: 4px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background-color 0.2s;
+}
+
+.confirm-yes {
+    background-color: #e74c3c;
+    color: white;
+}
+
+.confirm-yes:hover {
+    background-color: #c0392b;
+}
+
+.confirm-no {
+    background-color: #95a5a6;
+    color: white;
+}
+
+.confirm-no:hover {
+    background-color: #7f8c8d;
+} 

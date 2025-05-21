@@ -1,0 +1,244 @@
+Quiz Service API
+=====================================================
+
+1. [GET] http://localhost:5004/
+--------------------------
+Response:
+{
+  "message": "Quiz Service is running"
+}
+
+---------------------------------------------------
+
+2. [POST] http://localhost:5004/create-quiz
+--------------------------
+Headers:
+- Authorization: Bearer <JWT_TOKEN>
+- Role must be "teacher" or "admin"
+
+Body (raw JSON):
+{
+  "title": "Python Basics Quiz",
+  "subject": "Programming",
+  "level": "Beginner",
+  "questions": [
+    {
+      "question": "What is Python?",
+      "options": ["A programming language", "A snake", "A game", "A database"],
+      "correct_answer": 0
+    }
+  ]
+}
+
+Expected Response:
+{
+  "title": "Python Basics Quiz",
+  "subject": "Programming",
+  "level": "Beginner",
+  "questions": [...],
+  "teacher_username": "teacher1",
+  "_id": "<quiz_id>"
+}
+
+---------------------------------------------------
+
+3. [GET] http://localhost:5004/get-quizzes
+--------------------------
+Headers:
+- Authorization: Bearer <JWT_TOKEN>
+- Role must be "teacher" or "student"
+
+Query Params:
+- subject (optional)
+- level (optional)
+
+Example: http://localhost:5004/get-quizzes?subject=Programming&level=Beginner
+
+Expected Response:
+[
+  {
+    "title": "Python Basics Quiz",
+    "subject": "Programming",
+    "level": "Beginner",
+    "questions": [...],
+    "teacher_username": "teacher1",
+    "_id": "<quiz_id>"
+  }
+]
+
+Note: 
+- Teachers only see their own quizzes
+- Students only see quizzes from their assigned teachers
+- Response is cached for 1 hour
+
+---------------------------------------------------
+
+4. [GET] http://localhost:5004/quiz/<quiz_id>
+--------------------------
+Headers:
+- Authorization: Bearer <JWT_TOKEN>
+- Role must be "teacher" or "student"
+
+Expected Response:
+{
+  "title": "Python Basics Quiz",
+  "subject": "Programming",
+  "level": "Beginner",
+  "questions": [...],
+  "teacher_username": "teacher1",
+  "_id": "<quiz_id>"
+}
+
+Error Responses:
+- 404: Quiz not found
+- 403: User doesn't have access to this quiz
+
+---------------------------------------------------
+
+5. [POST] http://localhost:5004/submit-quiz
+--------------------------
+Headers:
+- Authorization: Bearer <JWT_TOKEN>
+- Role must be "student"
+
+Body (raw JSON):
+{
+  "quiz_id": "<quiz_id>",
+  "answers": [0, 1, 2, 3],
+  "time_taken": 300  // in seconds
+}
+
+Expected Response:
+{
+  "result_id": "<result_id>",
+  "score": 80,
+  "total_questions": 5,
+  "correct_answers": 4,
+  "feedback_task_id": "<task_id>"
+}
+
+---------------------------------------------------
+
+6. [GET] http://localhost:5004/feedback-status/<task_id>
+--------------------------
+Headers:
+- Authorization: Bearer <JWT_TOKEN>
+
+Expected Response:
+{
+  "status": "completed",
+  "feedback": "Your performance analysis...",
+  "recommendations": ["Study more about...", "Practice these topics..."]
+}
+
+---------------------------------------------------
+
+7. [GET] http://localhost:5004/user-results/<username>
+--------------------------
+Headers:
+- Authorization: Bearer <JWT_TOKEN>
+- Role must be "teacher" or "student"
+
+Expected Response:
+{
+  "results": [
+    {
+      "quiz_id": "<quiz_id>",
+      "quiz_title": "Python Basics Quiz",
+      "score": 80,
+      "total_questions": 5,
+      "correct_answers": 4,
+      "submitted_at": "2024-03-20T10:00:00Z"
+    }
+  ]
+}
+
+---------------------------------------------------
+
+8. [PUT] http://localhost:5004/update-quiz/<quiz_id>
+--------------------------
+Headers:
+- Authorization: Bearer <JWT_TOKEN>
+- Role must be "teacher" or "admin"
+
+Body (raw JSON):
+{
+  "title": "Updated Quiz Title",
+  "subject": "Programming",
+  "level": "Intermediate",
+  "questions": [...]
+}
+
+Expected Response:
+{
+  "message": "Quiz updated successfully",
+  "quiz": {
+    "title": "Updated Quiz Title",
+    "subject": "Programming",
+    "level": "Intermediate",
+    "questions": [...],
+    "teacher_username": "teacher1",
+    "_id": "<quiz_id>"
+  }
+}
+
+---------------------------------------------------
+
+9. [DELETE] http://localhost:5004/delete-quiz/<quiz_id>
+--------------------------
+Headers:
+- Authorization: Bearer <JWT_TOKEN>
+- Role must be "teacher" or "admin"
+
+Expected Response:
+{
+  "message": "Quiz deleted successfully"
+}
+
+---------------------------------------------------
+
+10. [POST] http://localhost:5004/invalidate-student-cache/<username>
+--------------------------
+Headers:
+- Authorization: Bearer <JWT_TOKEN>
+
+Expected Response:
+{
+  "message": "Student cache invalidated successfully"
+}
+
+---------------------------------------------------
+
+11. [POST] http://localhost:5004/user-session
+--------------------------
+Body (raw JSON):
+{
+  "userId": "user123",
+  "username": "student1"
+}
+
+Expected Response:
+{
+  "success": true,
+  "message": "User session created"
+}
+
+---------------------------------------------------
+
+12. [GET] http://localhost:5004/user-session/<user_id>
+--------------------------
+Expected Response:
+{
+  "userId": "user123",
+  "username": "student1"
+}
+
+---------------------------------------------------
+
+13. [DELETE] http://localhost:5004/user-session/<user_id>
+--------------------------
+Expected Response:
+{
+  "success": true,
+  "message": "User session cleared"
+}

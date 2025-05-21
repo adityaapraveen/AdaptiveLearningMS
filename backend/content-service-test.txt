@@ -1,0 +1,92 @@
+Content Delivery Service 
+=====================================================
+
+1. [GET] http://localhost:5001/
+--------------------------
+Response:
+{
+  "message": "This is the Content Delivery Service"
+}
+
+---------------------------------------------------
+
+2. [POST] http://localhost:5001/add-content
+--------------------------
+Headers:
+- Authorization: Bearer <JWT_TOKEN>
+- Role must be "teacher"
+
+Body (raw JSON):
+{
+  "title": "Introduction to Python",
+  "subject": "Programming",
+  "level": "Beginner",
+  "type": "Video",
+  "content_url": "http://example.com/python_intro"
+}
+
+Expected Response:
+{
+  "title": "Introduction to Python",
+  "subject": "Programming",
+  "level": "Beginner",
+  "type": "Video",
+  "content_url": "http://example.com/python_intro",
+  "teacher_username": "teacher1",
+  "_id": "<content_id>"
+}
+
+---------------------------------------------------
+
+3. [GET] http://localhost:5001/get-content
+--------------------------
+Headers:
+- Authorization: Bearer <JWT_TOKEN>
+- Role must be "teacher" or "student"
+
+Query Params:
+- subject (optional)
+- level (optional)
+
+Example: http://localhost:5001/get-content?subject=Programming&level=Beginner
+
+Expected Response (Example):
+[
+  {
+    "title": "Introduction to Python",
+    "subject": "Programming",
+    "level": "Beginner",
+    "type": "Video",
+    "content_url": "http://example.com/python_intro",
+    "teacher_username": "teacher1",
+    "_id": "<content_id>"
+  }
+]
+
+Note: 
+- Teachers only see their own content
+- Students only see content from their assigned teachers
+- Returns empty array if no content found
+
+---------------------------------------------------
+
+4. [GET] http://localhost:5001/content/<content_id>
+--------------------------
+Headers:
+- Authorization: Bearer <JWT_TOKEN>
+- Role must be "teacher" or "student"
+
+Expected Response:
+{
+  "title": "Introduction to Python",
+  "subject": "Programming",
+  "level": "Beginner",
+  "type": "Video",
+  "content_url": "http://example.com/python_intro",
+  "teacher_username": "teacher1",
+  "_id": "<content_id>"
+}
+
+Error Responses:
+- 404: Content not found
+- 403: User doesn't have access to this content

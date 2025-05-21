@@ -1,0 +1,176 @@
+User Service API 
+=========================================
+
+1. [GET] http://localhost:5000/
+--------------------------
+Response:
+{
+  "message": "This is the User Service"
+}
+
+---------------------------------------------------
+
+2. [POST] http://localhost:5000/register
+--------------------------
+Body (raw JSON):
+{
+  "username": "alice123",
+  "email": "alice@example.com",
+  "password": "password123",
+  "role": "student"
+}
+
+Expected Response:
+{
+  "message": "User registered successfully!"
+}
+
+---------------------------------------------------
+
+3. [POST] http://localhost:5000/login
+--------------------------
+Body (raw JSON):
+{
+  "username": "alice123",
+  "password": "password123"
+}
+
+Expected Response:
+{
+  "token": "<JWT_TOKEN>"
+}
+
+Save this token for use in protected endpoints.
+
+---------------------------------------------------
+
+4. [GET] http://localhost:5000/profile
+--------------------------
+Headers:
+- Authorization: Bearer <JWT_TOKEN>
+
+Expected Response:
+{
+  "username": "alice123",
+  "email": "alice@example.com",
+  "role": "student",
+  "teacher_code": "123456"
+}
+
+---------------------------------------------------
+
+5. [GET] http://localhost:5000/verify-token
+--------------------------
+Headers:
+- Authorization: Bearer <JWT_TOKEN>
+
+Expected Response:
+{
+  "message": "Token is valid",
+  "data": {
+    "username": "alice123",
+    "role": "student",
+    "exp": 1234567890
+  }
+}
+
+---------------------------------------------------
+
+6. [GET] http://localhost:5000/teacher/code
+--------------------------
+Headers:
+- Authorization: Bearer <JWT_TOKEN>
+- Role must be "teacher"
+
+Expected Response:
+{
+  "teacher_code": "123456"
+}
+
+---------------------------------------------------
+
+7. [POST] http://localhost:5000/teacher/code/regenerate
+--------------------------
+Headers:
+- Authorization: Bearer <JWT_TOKEN>
+- Role must be "teacher"
+
+Expected Response:
+{
+  "message": "Teacher code regenerated successfully",
+  "new_code": "654321"
+}
+
+---------------------------------------------------
+
+8. [POST] http://localhost:5000/student/join
+--------------------------
+Headers:
+- Authorization: Bearer <JWT_TOKEN>
+- Role must be "student"
+
+Body (raw JSON):
+{
+  "teacher_code": "123456"
+}
+
+Expected Response:
+{
+  "message": "Successfully joined teacher's class"
+}
+
+---------------------------------------------------
+
+9. [GET] http://localhost:5000/teacher/students
+--------------------------
+Headers:
+- Authorization: Bearer <JWT_TOKEN>
+- Role must be "teacher"
+
+Expected Response:
+{
+  "students": [
+    {
+      "username": "student1",
+      "email": "student1@example.com",
+      "joined_at": "2024-03-20T10:00:00Z"
+    }
+  ]
+}
+
+---------------------------------------------------
+
+10. [GET] http://localhost:5000/student/teachers
+--------------------------
+Headers:
+- Authorization: Bearer <JWT_TOKEN>
+- Role must be "student"
+
+Expected Response:
+{
+  "teachers": [
+    {
+      "username": "teacher1",
+      "email": "teacher1@example.com",
+      "joined_at": "2024-03-20T10:00:00Z"
+    }
+  ]
+}
+
+---------------------------------------------------
+
+11. [POST] http://localhost:5000/student/unsubscribe
+--------------------------
+Headers:
+- Authorization: Bearer <JWT_TOKEN>
+- Role must be "student"
+
+Body (raw JSON):
+{
+  "teacher_username": "teacher1"
+}
+
+Expected Response:
+{
+  "message": "Successfully unsubscribed from teacher"
+}

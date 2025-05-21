@@ -1,0 +1,309 @@
+API Gateway
+=====================================================
+
+1. [GET] http://localhost:8000/
+--------------------------
+Response:
+{
+  "message": "This is the API Gateway"
+}
+
+---------------------------------------------------
+
+2. [POST] http://localhost:8000/register
+--------------------------
+Body (raw JSON):
+{
+  "username": "student1",
+  "password": "password123",
+  "role": "student"
+}
+
+Expected Response:
+{
+  "message": "User registered successfully",
+  "user": {
+    "username": "student1",
+    "role": "student"
+  }
+}
+
+---------------------------------------------------
+
+3. [POST] http://localhost:8000/login
+--------------------------
+Body (raw JSON):
+{
+  "username": "student1",
+  "password": "password123"
+}
+
+Expected Response:
+{
+  "token": "<JWT_TOKEN>",
+  "user": {
+    "username": "student1",
+    "role": "student"
+  }
+}
+
+---------------------------------------------------
+
+4. [GET/POST] http://localhost:8000/users/
+--------------------------
+Headers:
+- Authorization: Bearer <JWT_TOKEN>
+- Role must be "student", "teacher", or "admin"
+
+Expected Response (GET):
+{
+  "users": [
+    {
+      "username": "student1",
+      "role": "student"
+    }
+  ]
+}
+
+---------------------------------------------------
+
+5. [GET] http://localhost:8000/content/get-content
+--------------------------
+Headers:
+- Authorization: Bearer <JWT_TOKEN>
+- Role must be "admin", "teacher", or "student"
+
+Expected Response:
+{
+  "content": [
+    {
+      "title": "Python Basics",
+      "subject": "Programming",
+      "level": "Beginner",
+      "content": "..."
+    }
+  ]
+}
+
+---------------------------------------------------
+
+6. [POST] http://localhost:8000/content/add-content
+--------------------------
+Headers:
+- Authorization: Bearer <JWT_TOKEN>
+- Role must be "admin" or "teacher"
+
+Body (raw JSON):
+{
+  "title": "Python Basics",
+  "subject": "Programming",
+  "level": "Beginner",
+  "content": "..."
+}
+
+Expected Response:
+{
+  "message": "Content added successfully",
+  "content_id": "<content_id>"
+}
+
+---------------------------------------------------
+
+7. [POST] http://localhost:8000/quiz/create-quiz
+--------------------------
+Headers:
+- Authorization: Bearer <JWT_TOKEN>
+- Role must be "admin" or "teacher"
+
+Body (raw JSON):
+{
+  "title": "Python Basics Quiz",
+  "subject": "Programming",
+  "level": "Beginner",
+  "questions": [
+    {
+      "question": "What is Python?",
+      "options": ["A programming language", "A snake", "A game", "A database"],
+      "correct_answer": 0
+    }
+  ]
+}
+
+Expected Response:
+{
+  "title": "Python Basics Quiz",
+  "subject": "Programming",
+  "level": "Beginner",
+  "questions": [...],
+  "teacher_username": "teacher1",
+  "_id": "<quiz_id>"
+}
+
+---------------------------------------------------
+
+8. [GET] http://localhost:8000/quiz/get-quizzes
+--------------------------
+Headers:
+- Authorization: Bearer <JWT_TOKEN>
+- Role must be "admin", "teacher", or "student"
+
+Query Params:
+- subject (optional)
+- level (optional)
+
+Expected Response:
+[
+  {
+    "title": "Python Basics Quiz",
+    "subject": "Programming",
+    "level": "Beginner",
+    "questions": [...],
+    "teacher_username": "teacher1",
+    "_id": "<quiz_id>"
+  }
+]
+
+---------------------------------------------------
+
+9. [GET] http://localhost:8000/quiz/quiz/<quiz_id>
+--------------------------
+Headers:
+- Authorization: Bearer <JWT_TOKEN>
+- Role must be "admin", "teacher", or "student"
+
+Expected Response:
+{
+  "title": "Python Basics Quiz",
+  "subject": "Programming",
+  "level": "Beginner",
+  "questions": [...],
+  "teacher_username": "teacher1",
+  "_id": "<quiz_id>"
+}
+
+---------------------------------------------------
+
+10. [POST] http://localhost:8000/quiz/submit-quiz
+--------------------------
+Headers:
+- Authorization: Bearer <JWT_TOKEN>
+- Role must be "student"
+
+Body (raw JSON):
+{
+  "quiz_id": "<quiz_id>",
+  "answers": [0, 1, 2, 3],
+  "time_taken": 300
+}
+
+Expected Response:
+{
+  "result_id": "<result_id>",
+  "score": 80,
+  "total_questions": 5,
+  "correct_answers": 4,
+  "feedback_task_id": "<task_id>"
+}
+
+---------------------------------------------------
+
+11. [GET] http://localhost:8000/quiz/feedback-status/<task_id>
+--------------------------
+Headers:
+- Authorization: Bearer <JWT_TOKEN>
+- Role must be "student"
+
+Expected Response:
+{
+  "status": "completed",
+  "feedback": "Your performance analysis...",
+  "recommendations": ["Study more about...", "Practice these topics..."]
+}
+
+---------------------------------------------------
+
+12. [GET] http://localhost:8000/quiz/user-results/<username>
+--------------------------
+Headers:
+- Authorization: Bearer <JWT_TOKEN>
+- Role must be "admin", "teacher", or "student"
+- Students can only view their own results
+
+Expected Response:
+{
+  "results": [
+    {
+      "quiz_id": "<quiz_id>",
+      "quiz_title": "Python Basics Quiz",
+      "score": 80,
+      "total_questions": 5,
+      "correct_answers": 4,
+      "submitted_at": "2024-03-20T10:00:00Z"
+    }
+  ]
+}
+
+---------------------------------------------------
+
+13. [PUT] http://localhost:8000/quiz/update-quiz/<quiz_id>
+--------------------------
+Headers:
+- Authorization: Bearer <JWT_TOKEN>
+- Role must be "admin" or "teacher"
+
+Body (raw JSON):
+{
+  "title": "Updated Quiz Title",
+  "subject": "Programming",
+  "level": "Intermediate",
+  "questions": [...]
+}
+
+Expected Response:
+{
+  "message": "Quiz updated successfully",
+  "quiz": {
+    "title": "Updated Quiz Title",
+    "subject": "Programming",
+    "level": "Intermediate",
+    "questions": [...],
+    "teacher_username": "teacher1",
+    "_id": "<quiz_id>"
+  }
+}
+
+---------------------------------------------------
+
+14. [DELETE] http://localhost:8000/quiz/delete-quiz/<quiz_id>
+--------------------------
+Headers:
+- Authorization: Bearer <JWT_TOKEN>
+- Role must be "admin" or "teacher"
+
+Expected Response:
+{
+  "message": "Quiz deleted successfully"
+}
+
+---------------------------------------------------
+
+15. [POST] http://localhost:8000/quiz/clear-quiz-cache
+--------------------------
+Headers:
+- Authorization: Bearer <JWT_TOKEN>
+- Any authenticated user can clear their cache
+
+Expected Response:
+{
+  "success": true,
+  "message": "Cleared X cached items"
+}
+
+---------------------------------------------------
+
+Note: All endpoints support OPTIONS method for CORS preflight requests.
+Each endpoint will return appropriate error responses (401, 403, 404, etc.) when:
+- Token is missing or invalid
+- User doesn't have required role
+- Resource is not found
+- Request validation fails
